@@ -1,0 +1,119 @@
+.backgrounds-img {
+  width: 100%;
+  height: 100%;
+}
+.background-container {
+  position: relative;
+}
+.pokemon-name-container {
+  display: flex;
+  position: absolute;
+  width: 95%;
+  top: 0;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pokemon-number {
+  font-size: 1vh;
+  margin-left: 5%;
+}
+.pokemon-name {
+  font-size: 1vh;
+}
+.feu-energie {
+  height: 1.9vh;
+  margin-right: 5%;
+}
+.image-container {
+  display: flex;
+  position: absolute;
+  top: 23%;
+  width: 100%;
+  justify-content: center;
+}
+.salameche-img {
+  height: 50%;
+  width: 50%;
+  background-color: white;
+  border-radius: 20%;
+}
+.bottom-container {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  justify-content: center;
+}
+.gen {
+  font-size: 1.3vh;
+}
+
+@media screen and (min-width: 600px) {
+  .pokemon-number {
+    font-size: 1.2vh;
+  }
+  .pokemon-name {
+    font-size: 1.2vh;
+  }
+  .gen{
+    font-size:  1.2vh;
+  
+  }
+}
+@media screen and (min-width: 768px) {
+  .pokemon-number {
+    font-size: 1.4vh;
+  }
+  .pokemon-name {
+    font-size: 1.4vh;
+  }
+  .gen{
+    font-size:  1.4vh;
+  
+  }
+}
+@media screen and (min-width: 1000px) {
+  .pokemon-number {
+    font-size: 1.5vh;
+  }
+  .pokemon-name {
+    font-size: 1.5vh;
+    margin-right: 4vw;
+  }
+  .gen{
+    font-size:  1.5vh;
+  }
+  
+}
+@media screen and (min-width: 1300px) {
+  .pokemon-number {
+    font-size: 1.8vh;
+  }
+  .pokemon-name {
+    font-size: 2.8vh;
+  }
+  .gen{
+    font-size:  3.8vh;
+  }
+  .feu-energie {
+    height: 3.5vh;
+  }
+}
+
+.backgrounds-img-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12%; /* Je suis idiot j'ai mal dimmensioné figma j'ai eu la flemme de refaire des overlay au propre a modifié */
+}
+.energie-container{
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 8vh;
+  justify-content: space-between;
+  width: 100%;
+}
