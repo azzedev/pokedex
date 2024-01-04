@@ -1,3 +1,7 @@
+
+
+
+
 .backgrounds-img {
   width: 100%;
   height: 100%;
@@ -117,3 +121,105 @@
   justify-content: space-between;
   width: 100%;
 }
+
+/* Ajoutez ces styles dans votre fichier PokemonCard.css ou créez un fichier CSS dédié */
+
+/* Fiche individuelle du Pokémon */
+.popup-container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+  text-align: center;
+}
+
+/* Fond de la fiche en fonction du type du Pokémon */
+.popup-container img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+/* Bouton de fermeture */
+.popup-container button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Numéro du Pokémon */
+.popup-container p.number {
+  margin: 0;
+  font-weight: bold;
+}
+
+/* Nom du Pokémon */
+.popup-container h2 {
+  margin: 10px 0;
+}
+
+/* Image du Pokémon */
+.popup-container img.pokemon-image {
+  max-width: 50%;
+  height: auto;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.popup-container div.stats-container {
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.popup-container div.stats-container span {
+  flex: 1;
+}
+
+/* Génération du Pokémon */
+.popup-container p.generation {
+  margin: 0;
+}
+
+/* Types du Pokémon */
+.popup-container div.types-container {
+  margin-top: 10px;
+}
+
+.popup-container div.types-container img {
+  max-width: 50px;
+  height: auto;
+  margin-right: 10px;
+}
+
+/* Taille et poids du Pokémon */
+.popup-container div.size-weight-container {
+  margin-top: 10px;
+}
+
+.popup-container div.size-weight-container p {
+  margin: 0;
+}
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+
+
