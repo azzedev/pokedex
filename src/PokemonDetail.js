@@ -102,6 +102,7 @@ function PokemonCard() {
   const [searchText, setSearchText] = useState('');
   const { t } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [evolutionData, setEvolutionData] = useState([]);
 
 
 
@@ -122,7 +123,7 @@ function PokemonCard() {
     setSelectedImage(selectedImage === 'image' ? 'image_shiny' : 'image')
   }
 
-  const openBigCard = (pokemonData) => {
+  const openBigCard = async (pokemonData) => {
     console.log("Afficher la fiche complète du Pokémon :", pokemonData);
     setSelectedPokemon(pokemonData);
     setShowPopup(true);
@@ -138,6 +139,8 @@ function PokemonCard() {
     return pokemon.name['fr'].toLowerCase().includes(searchText.toLowerCase());
   };
 
+  
+
   const getStatLabel = (stat) => {
     const labels = {
       hp: 'PV',
@@ -149,7 +152,6 @@ function PokemonCard() {
     };
     return t(labels[stat]) || stat; // Utiliser le nom original si la correspondance n'est pas trouvée
   };
-
 
   return (
     <>
