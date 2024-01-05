@@ -37,6 +37,10 @@ import backgroundSol2 from "./backgrounds/background-sol2.svg";
 import backgroundSpectre2 from "./backgrounds/background-spectre2.svg";
 import backgroundTenebres2 from "./backgrounds/background-tenebre2.svg";
 import backgroundVol2 from "./backgrounds/background-vol2.svg";
+import { useTranslation } from 'react-i18next';
+import LanguageSelector from './LanguageSelector';
+
+
 
 
 
@@ -86,64 +90,282 @@ const backgroundOverlayMapping = {
 
 
 function PokemonCard() {
+  const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [data, setData] = useState([]);
+  const [data2, setData2] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedGeneration, setSelectedGeneration] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
+  const [sortField, setSortField] = useState('id');
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [selectedImage, setSelectedImage] = useState('image');
+  const [searchText, setSearchText] = useState('');
+  const { t } = useTranslation();
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [evolutionFrom, setEvolutionFrom] = useState([]);
+  const [evolutionTo, setEvolutionTo] = useState([]);
+
+
+
+
   useEffect(() => {
     fetch('https://pokedex-api.3rgo.tech/api/pokemon')
       .then(response => response.json())
       .then(json => setData(json['data']))
       .catch(error => console.error(error));
+
+    fetch('https://pokedex-api.3rgo.tech/api/types')
+      .then(response => response.json())
+      .then(json => setData2(json['data']))
+      .catch(error => console.error(error));
   }, []);
 
-  const [data2, setData2] = useState([]);
-  useEffect(()=>{
-    fetch('https://pokedex-api.3rgo.tech/api/types')
-    .then(response=>response.json())
-    .then(json=>setData2(json['data']))
-    .catch(error=>console.error(error));
-  },[]);
+  const HandleEvolutionFrom = (pok) => {
+    const evolvedFromIds = pok.evolvedFrom ? Object.keys(pok.evolvedFrom).map(Number) : [];
+    console.log("evolvesFromIds:", evolvedFromIds)
 
-  
+    const pokemonEvol = data.filter((pokemon) =>
+      evolvedFromIds.includes(pokemon.id)
+    );
 
-  return data.map((pokemon) => (
-    <Tilt key={pokemon.number} className="tilt-card">
-      <div className="background-container">
-        {
-          pokemon.types.length === 1 ? (
-            <img src={backgroundMapping[pokemon.types[0]]} alt="background" className="backgrounds-img" />
-          ) : (
-            <>
-              <img src={backgroundMapping[pokemon.types[0]]} alt="background" className="backgrounds-img" />
-            <img src={backgroundOverlayMapping[pokemon.types[1]]} alt="background-overlay" className="backgrounds-img-overlay" />
-            </>
-          )
-        }
-      
-        <div className="pokemon-name-container">
-          <p className="pokemon-number">N°{pokemon.id}</p>
-          <h2 className="pokemon-name">{pokemon.name['fr']}</h2>
-          </div>
-        <div className="image-container">
-          <img className="salameche-img" src={pokemon.image} alt={pokemon.name['fr']} ></img>
-        </div>
-        <div className="bottom-container">
-          <p className="gen">génération {pokemon.generation} </p>
-        </div>
-        <div className='energie-container'>
-        {
-          data2.map((type) => {
-            if (pokemon.types.includes(type.id)) {
-              return(
-              <img className="feu-energie" src={type.image} alt={type.name['fr']}></img>)
-            } else {
-              return (null)
-            }
-          })
-          
-}
-</div>
+    setEvolutionFrom(pokemonEvol);
+  };
+
+  const HandleEvolutionTo = (pok) => {
+    const evolvesToIds = pok.evolvesTo ? Object.keys(pok.evolvesTo).map(Number) : [];
+    console.log("evolvesToIds:", evolvesToIds);
+    console.log("dataPokemon:", data);
+    const pokemonEvol = data.filter((pokemon) =>
+      evolvesToIds.includes(pokemon.id)
+    );
+
+    console.log("evolutionTo:", pokemonEvol);
+    setEvolutionTo(pokemonEvol);
+  };
+
+  const handleImage = () => {
+    setSelectedImage(selectedImage === 'image' ? 'image_shiny' : 'image')
+  }
+
+  const openBigCard = (pokemonData) => {
+    console.log("Afficher la fiche complète du Pokémon :", pokemonData);
+    setSelectedPokemon(pokemonData);
+    setShowPopup(true);
+
+    HandleEvolutionFrom(pokemonData);
+    HandleEvolutionTo(pokemonData);
+  };
+
+
+  const closePopup = () => {
+    setSelectedPokemon(null);
+    setShowPopup(false);
+    setEvolutionFrom([]);
+    setEvolutionTo([]);
+  };
+
+  const filterPokemonByName = (pokemon) => {
+    return pokemon.name['fr'].toLowerCase().includes(searchText.toLowerCase());
+  };
+
+
+
+  const getStatLabel = (stat) => {
+    const labels = {
+      hp: 'PV',
+      atk: 'Attaque',
+      def: 'Défense',
+      vit: 'Vitesse',
+      spe_atk: 'Attaque spéciale',
+      spe_def: 'Défense spéciale',
+    };
+    return t(labels[stat]) || stat;
+  };
+
+
+
+  return (
+    <>
+
+      <LanguageSelector setSelectedLanguage={setSelectedLanguage}></LanguageSelector>
+      <div className='filtre'>
+        <input
+          type="text"
+          placeholder={t("Rechercher par nom")}
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+        <select
+          value={selectedGeneration}
+          onChange={(e) => setSelectedGeneration(e.target.value)}
+        >
+          <option value="">{t('Toutes les générations')}</option>
+          {[...new Set(data.map((pokemon) => pokemon.generation))].map((generation) => (
+            <option key={generation} value={generation}>
+              {t('Génération')} {generation}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={selectedType}
+          onChange={(e) => setSelectedType(e.target.value)}
+        >
+          <option value="">{t('Tous les types')}</option>
+          {data2.map((type) => (
+            <option key={type.id} value={type.id}>
+              {type.name[selectedLanguage]}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={sortField}
+          onChange={(e) => setSortField(e.target.value)}
+        >
+          <option value="id">{t('Numéro')}</option>
+          <option value="name">{t('Alphabétique')}</option>
+          <option value="weight">{t('Poids')}</option>
+          <option value="height">{t('Taille')}</option>
+        </select>
+
+
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+        >
+          <option value="asc">{t('Croissant')}</option>
+          <option value="desc">{t('Décroissant')}</option>
+        </select>
+
       </div>
-    </Tilt>
-  ));
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup-container">
+            <button onClick={closePopup} className="close-button">{t('Fermer')}</button>
+            <div className="pokemon-info">
+              <p className="number">{selectedPokemon.id}</p>
+              <h2 className="pokemon-name">{selectedPokemon.name[selectedLanguage]}</h2>
+              <p className="generation">{t('Génération')} {selectedPokemon.generation} </p>
+            </div>
+            <img
+              className="pokemon-image"
+              src={selectedPokemon[selectedImage]}
+              alt={selectedPokemon.name[selectedLanguage]}
+              onClick={handleImage}
+            />
+            <div className="stats-container">
+              <p>
+                {Object.entries(selectedPokemon.stats).map(([stat, val]) => (
+                  <span key={stat}> {getStatLabel(stat)} = {val} </span>
+                ))}
+              </p>
+            </div>
+            <div className="types-container">
+              {data2.map((type) => {
+                if (selectedPokemon.types.includes(type.id)) {
+                  return (
+                    <img key={type.id} className="type-image" src={type.image} alt={type.name[selectedLanguage]} />
+                  );
+                } else {
+                  return null;
+                }
+              })}
+            </div>
+            <div className="size-weight-container">
+              <p>{t('Taille')} : {selectedPokemon.height} {t('Poids')} : {selectedPokemon.weight}</p>
+
+            </div>
+
+            {/* Affichage des évolutions */}
+            {evolutionFrom.length > 0 && (
+              <div className="evolution-info">
+                <h3>{t('Évolutions à partir de ce Pokémon :')}</h3>
+                {evolutionFrom.map((evoPokemon) => (
+                  <div key={evoPokemon.id} onClick={() => openBigCard(evoPokemon)}>
+                    <p>{evoPokemon.name[selectedLanguage]}</p>
+                    <img src={evoPokemon.image} alt={evoPokemon.name[selectedLanguage]} />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {evolutionTo.length > 0 && (
+              <div className="evolution-info">
+                <h3>{t('Évolutions de ce Pokémon :')}</h3>
+                {evolutionTo.map((evoPokemon) => (
+                  <div key={evoPokemon.id} onClick={() => openBigCard(evoPokemon)}>
+                    <p>{evoPokemon.name[selectedLanguage]}</p>
+                    <img src={evoPokemon.image} alt={evoPokemon.name[selectedLanguage]} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+
+
+      {data
+        .filter(
+          (pokemon) =>
+            filterPokemonByName(pokemon) &&
+            (!selectedGeneration || pokemon.generation == selectedGeneration) &&
+            (!selectedType || pokemon.types.includes(parseInt(selectedType)))
+        )
+        .sort((a, b) => {
+          const aValue = a[sortField];
+          const bValue = b[sortField];
+          console.log(sortField)
+
+          if (sortOrder === 'asc') {
+            return aValue < bValue ? -1 : 1;
+          } else {
+            return aValue > bValue ? -1 : 1;
+          }
+        })
+        .map((pokemon) => (
+          <Tilt key={pokemon.number} className="tilt-card">
+            <div className="background-container" onClick={() => openBigCard(pokemon)}>
+              {
+                pokemon.types.length === 1 ? (
+                  <img src={backgroundMapping[pokemon.types[0]]} alt="background" className="backgrounds-img" />
+                ) : (
+                  <>
+                    <img src={backgroundMapping[pokemon.types[0]]} alt="background" className="backgrounds-img" />
+                    <img src={backgroundOverlayMapping[pokemon.types[1]]} alt="background-overlay" className="backgrounds-img-overlay" />
+                  </>
+                )
+              }
+
+              <div className="pokemon-name-container">
+                <p className="pokemon-number">N°{pokemon.id}</p>
+                <h2 className="pokemon-name">{pokemon.name[selectedLanguage]}</h2>
+              </div>
+              <div className="image-container">
+                <img className="salameche-img" src={pokemon.image} alt={pokemon.name[selectedLanguage]} ></img>
+              </div>
+              <div className="bottom-container">
+                <p className="gen">{t('Génération')} {pokemon.generation} </p>
+              </div>
+              <div className='energie-container'>
+                {
+                  data2.map((type) => {
+                    if (pokemon.types.includes(type.id)) {
+                      return (
+                        <img className="feu-energie" src={type.image} alt={type.name[selectedLanguage]}></img>)
+                    } else {
+                      return (null)
+                    }
+                  })
+                }
+              </div>
+            </div>
+          </Tilt>
+        ))}
+    </>
+  );
 }
 
 export default PokemonCard;

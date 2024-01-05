@@ -23,7 +23,9 @@ const resources = {
       "Défense" : "Defense",
       "Vitesse" : "Speed",
       "Attaque spéciale" : "Special attack",
-      "Défense spéciale" : "Special defense"
+      "Défense spéciale" : "Special defense",
+      "Évolutions à partir de ce Pokémon :" : "Evolutions from this Pokemon :",
+      "Évolutions de ce Pokémon :" : "Evolutions of this Pokemon :"
     }
   },
   fr: {
@@ -44,7 +46,9 @@ const resources = {
       "Défense" : "Défense",
       "Vitesse" : "Vitesse",
       "Attaque spéciale" : "Attaque spéciale",
-      "Défense spéciale" : "Défence spéciale"
+      "Défense spéciale" : "Défence spéciale",
+      "Évolutions à partir de ce Pokémon :" : "Évolutions à partir de ce Pokémon :",
+      "Évolutions de ce Pokémon :" : "Évolutions de ce Pokémon :"
     }
   }
 };

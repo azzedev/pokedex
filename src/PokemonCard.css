@@ -111,7 +111,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 12%; /* Je suis idiot j'ai mal dimmensioné figma j'ai eu la flemme de refaire des overlay au propre a modifié */
+  border-radius: 12%;
 }
 .energie-container{
   display: flex;
@@ -141,6 +141,11 @@
   margin: 10px 0;
 }
 
+.popup-container .pokemon-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .popup-container button {
   position: absolute;
@@ -165,8 +170,9 @@
 }
 
 
+
 .popup-container img.pokemon-image {
-  max-width: 50%;
+  max-width: 25%;
   height: auto;
   border-radius: 8px;
   cursor: pointer;
@@ -193,7 +199,7 @@
 }
 
 .popup-container div.types-container img {
-  max-width: 50px;
+  max-width: 40px;
   height: auto;
   margin-right: 10px;
 }
@@ -217,6 +223,33 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
+}
+
+
+.evolution-info {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.evolution-info h3 {
+  text-align: center;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.evolution-info div {
+  text-align: center;
+}
+
+.evolution-info p {
+  margin: 5px 0;
+}
+
+.evolution-info img {
+  max-width: 80px;
+  height: auto;
+  margin: 5px 0;
 }
 
 
